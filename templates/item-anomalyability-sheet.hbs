@@ -10,7 +10,7 @@
 
   <div class="tab-content flexrow manilla-folder">
       <div class="tab active" data-group="primary" data-tab="main">
-        <div class="tab-workarea" style="height: 781px; font-size: 10pt">
+        <div class="tab-workarea" style="height: 781px; font-size: 10pt; overflow-y: auto">
           <div style="display: flex; font-size: 1.8em; width: 100%">
             <input name="name" type="text" value="{{item.name}}" placeholder="Anomaly name" style="margin-right: 10px;"/>
             <input name="system.reference" type="text" value="{{system.reference}}"
@@ -92,41 +92,46 @@
             <legend class="context-anomaly">
               {{localize "TA.Outcome.Improvement"}}
               <i class="addAnswer fa-solid fa-square-plus"
-                style="margin-top: 1px; margin-left: 8px; vertical-align: middle; cursor: pointer" title="{{localize "TA.Anomaly.AddAnswer"}}">
+                style="margin-top: 1px; margin-left: 8px; vertical-align: middle; cursor: pointer"
+                title="{{localize "TA.Anomaly.AddAnswer"}}">
               </i>
             </legend>
-            <div style="height: 115px">
-              <div style="margin-top: 4px">
-                <input name="system.improvement.question" type="text"
-                  value="{{system.improvement.question}}" placeholder="Advancement question"
-                />
-              </div>
 
-              <div style="display: grid; grid-template-columns: auto 160px; gap: 0 10px">
+            <div style="margin-top: 4px">
+              <input name="system.improvement.question" type="text"
+                value="{{system.improvement.question}}" placeholder="Advancement question"
+              />
+            </div>
+
+            <div style="max-height: 115px; overflow-y: auto; margin-top: 4px; padding-right: 6px">
+              <div style="display: grid; grid-template-columns: auto 20px 160px; gap: 0 10px">
                 {{#each system.improvement.answers}}
-                  <div style="margin: 5px 0 0 15px">
-                    <input name="system.improvement.answers.{{@key}}.text" type="text"
-                      value="{{this.text}}" placeholder="Answer"
-                    />
-                  </div>
-                  <div style="margin-top: 5px">
-                    <label class="articulat-bold">{{localize "TA.Outcome.AnswerTrackSize"}}</label>
-                    <input name="system.improvement.answers.{{@key}}.track.size" type="number" value="{{this.track.size}}"
-                      min="0" max="5" maxLength="1"
-                      style="margin-left: 5px; width: 20px; text-align: center; border: none; background-color: white"
-                      oninput="this.value=this.value.slice(0,this.maxLength)"
-                      onmouseenter="this.focus()"
-                      onmouseleave="this.blur()"
-                    />
-                    <span class="color-red" style="margin-top: -1px">&#9654;</span>
-                    <input name="system.improvement.answers.{{@key}}.nextStage" type="text"
-                      value="{{this.nextStage}}" placeholder="??"
-                      style="width: 40px; text-transform:uppercase"
-                      oninput="this.value = this.value.toUpperCase();"
-                    />
-                  </div>
-                {{/each}}
-              </div>
+                <div style="margin: 5px 0 0 15px">
+                  <input name="system.improvement.answers.{{@key}}.text" type="text"
+                    value="{{this.text}}" placeholder="Answer"
+                  />
+                </div>
+                <div style="margin-top: 5px; text-align: center">
+                  <i class="deleteAnswer fa-solid fa-trash-can editicon"
+                  data-answer-key="{{@key}}" title="Delete" style="cursor: pointer"></i>
+                </div>
+                <div style="margin-top: 5px">
+                  <label class="articulat-bold">{{localize "TA.Outcome.AnswerTrackSize"}}</label>
+                  <input name="system.improvement.answers.{{@key}}.track.size" type="number" value="{{this.track.size}}"
+                    min="0" max="5" maxLength="1"
+                    style="margin-left: 5px; width: 20px; text-align: center; border: none; background-color: white"
+                    oninput="this.value=this.value.slice(0,this.maxLength)"
+                    onmouseenter="this.focus()"
+                    onmouseleave="this.blur()"
+                  />
+                  <span class="color-red" style="margin-top: -1px">&#9654;</span>
+                  <input name="system.improvement.answers.{{@key}}.nextStage" type="text"
+                    value="{{this.nextStage}}" placeholder="??"
+                    style="width: 40px; text-transform:uppercase"
+                    oninput="this.value = this.value.toUpperCase();"
+                  />
+                </div>
+              {{/each}}
             </div>
           </fieldset>
 

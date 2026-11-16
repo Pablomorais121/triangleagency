@@ -87,35 +87,40 @@ export class taAnomalyAbilitySheet extends foundry.appv1.sheets.ItemSheet {
     if (!this.options.editable) return;
     html.find(".editOutcome").click(this._listenEditOutcome.bind(this));
     html.find(".addAnswer").click(this._listenAddAnswer.bind(this));
+    html.find(".deleteAnswer").click(this._listenDeleteAnswer.bind(this));
   }
 
 
   async _listenAddAnswer(event) {
     event.preventDefault();
-    const TEMPLATE = 'systems/triangleagency/templates/item-anomalyability-outcome-sheet.hbs';
-    const answers = this.item.system.improvement.answers;
-    const update = {};
-    for (let i = 1; i <= 4; i++) {
-      if (answers["answer" + i]) { continue }
-      update["system.improvement.answers.answer" + i] = {
+    const answers = this.item.system.improvement.answers ?? {};
+
+    let maxN = 0;
+    for (const key of Object.keys(answers)) {
+      const n = parseInt(key.slice(6), 10);
+      if (n > maxN) maxN = n;
+    }
+    const newKey = "answer" + (maxN + 1);
+
+    await this.item.update({
+      ["system.improvement.answers." + newKey]: {
         text: "",
-        track: {
-          id: "",
-          reference: "",
-          name: "",
-          description: "",
-          size: 3,
-          value: 0,
-          strikes: 0,
-          milestones: {}
-        },
+        track: { id: "", reference: "", name: "", description: "",
+                size: 3, value: 0, strikes: 0, milestones: {} },
         nextStage: ""
       }
-      this.item.update(update);
-      break;
-    }
+    });
   }
 
+  async _listenDeleteAnswer(event) {
+    event.preventDefault();
+    const key = event.currentTarget.dataset.key;
+    if (!key) return;
+    await this.item.update({
+      [`-=system.improvement.answers.${key}`]: null
+    });
+  };
+    
 
   async _listenEditOutcome(event) {
     event.preventDefault();
